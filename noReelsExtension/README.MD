@@ -2,10 +2,11 @@
 
 # NoReels - YouTube Shorts Blocker
 
-[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow)](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
-[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue)](https://developer.chrome.com/docs/extensions/)
-[![HTML5](https://img.shields.io/badge/HTML5-orange)](https://developer.mozilla.org/pt-BR/docs/Web/HTML)
-[![CSS3](https://img.shields.io/badge/CSS3-blue)](https://developer.mozilla.org/pt-BR/docs/Web/CSS)
+# 🌐 Landing Page & Demo
+Você pode visualizar a página oficial do projeto e baixar a versão pronta para uso aqui: 👉 
+
+# [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow)](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript) [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue)](https://developer.chrome.com/docs/extensions/) [![HTML5](https://img.shields.io/badge/HTML5-orange)](https://developer.mozilla.org/pt-BR/docs/Web/HTML) [![CSS3](https://img.shields.io/badge/CSS3-blue)](https://developer.mozilla.org/pt-BR/docs/Web/CSS)
+
 
 Extensão para Google Chrome desenvolvida com JavaScript puro e Web Extensions API (Manifest V3), projetada para ocultar automaticamente os "Shorts" do YouTube, permitindo uma navegação focada e livre de distrações.
 

@@ -2,16 +2,25 @@ console.log("[YT Shorts Blocker] content.js ativo");
 
 let extensionEnabled = true;
 
-// 1. CARREGAMENTO DO ESTADO (Otimizado para iniciar ligado)
-chrome.storage.local.get(["enabled"], result => {
-  extensionEnabled = result.enabled ?? true;
-  // Se já houver body, limpa na hora. Se não, o observer pegará depois.
-  if (extensionEnabled && document.body) {
-    executarLimpezaGeral();
-  }
-});
+// 1. CARREGAMENTO DO ESTADO E INICIALIZAÇÃO SEGURA
+function iniciar() {
+  chrome.storage.local.get(["enabled"], result => {
+    extensionEnabled = result.enabled ?? true;
+    if (extensionEnabled && document.body) {
+      executarLimpezaGeral();
+      // O segredo para a Home: observar o body após ele existir
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  });
+}
 
-// 2. ESCUTA MUDANÇAS NO BOTÃO
+if (document.body) {
+  iniciar();
+} else {
+  document.addEventListener("DOMContentLoaded", iniciar);
+}
+
+// 2. ESCUTA MUDANÇAS NO BOTÃO (POPUP)
 chrome.storage.onChanged.addListener(changes => {
   if (changes.enabled) {
     extensionEnabled = changes.enabled.newValue;
@@ -24,35 +33,49 @@ chrome.storage.onChanged.addListener(changes => {
   }
 });
 
-// 3. FUNÇÕES DE BLOQUEIO (ORIGINAIS)
+// 3. FUNÇÕES DE BLOQUEIO (ATUALIZADAS PARA PESQUISA + HOME)
 function blockElement(element) {
-  if (!element || !extensionEnabled) return;
+  if (!element || !extensionEnabled || element.style.display === "none") return;
   element.style.display = "none";
   createWarning();
 }
 
 function reexibirTudo() {
+  // Seletores expandidos para garantir que tudo volte ao normal ao desligar
   const items = document.querySelectorAll(
-    "grid-shelf-view-model, ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer"
+    "grid-shelf-view-model, ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer, ytd-rich-section-renderer, ytd-reel-shelf-renderer, ytd-grid-video-renderer"
   );
   items.forEach(el => { el.style.display = ""; });
 }
 
 function blockShortsShelf() {
-  document.querySelectorAll("grid-shelf-view-model").forEach(el => blockElement(el));
+  // Pega as prateleiras de Shorts (Shelfs) na pesquisa e na Home
+  const shelves = document.querySelectorAll("ytd-rich-section-renderer, ytd-reel-shelf-renderer, grid-shelf-view-model");
+  shelves.forEach(el => {
+    // Se o texto interno contém "Shorts", bloqueamos a seção inteira
+    if (el.textContent.includes("Shorts")) {
+      blockElement(el);
+    }
+  });
 }
 
 function blockInlineShorts() {
-  const items = document.querySelectorAll("ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer");
+  // Itens individuais na grade (Home e Pesquisa)
+  const items = document.querySelectorAll("ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer, ytd-grid-video-renderer");
   items.forEach(item => {
     const badge = item.querySelector(".yt-badge-shape__text");
-    if (badge && badge.textContent.trim().toUpperCase() === "SHORTS") {
+    const thumbnail = item.querySelector("a#thumbnail");
+    
+    // Bloqueia se tiver a etiqueta "SHORTS" ou se o link levar para /shorts/
+    if ((badge && badge.textContent.trim().toUpperCase() === "SHORTS") || 
+        (thumbnail && thumbnail.href.includes("/shorts/"))) {
       blockElement(item);
     }
   });
 }
 
 function blockOverlayShorts() {
+  // Bloqueio rápido pelo ícone de overlay do YouTube
   document.querySelectorAll('ytd-thumbnail-overlay-time-status-renderer[overlay-style="SHORTS"]')
     .forEach(overlay => {
       const card = overlay.closest("ytd-rich-item-renderer") ||
@@ -70,18 +93,14 @@ function executarLimpezaGeral() {
   blockOverlayShorts();
 }
 
-// 4. OBSERVER (FLUIDEZ TOTAL)
-// Em vez de observar o 'body' direto, observamos o 'document' que sempre existe
+// 4. OBSERVER (Monitora o carregamento infinito do YouTube)
 const observer = new MutationObserver(() => {
   if (extensionEnabled) {
     executarLimpezaGeral();
   }
 });
 
-// Observar o documentElement (HTML) é mais seguro e fluido que o body no início
-observer.observe(document.documentElement, { childList: true, subtree: true });
-
-// 5. AVISO VISUAL
+// 5. AVISO VISUAL (O seu código original com o X de fechar)
 function createWarning() {
   if (!extensionEnabled || document.getElementById("shorts-block-warning")) return;
 
@@ -105,24 +124,21 @@ function createWarning() {
 
   document.body.appendChild(warning);
 
-  // Selecionamos o botão após ele ser adicionado ao corpo da página
   const closeBtn = document.getElementById("close-warning");
-
   closeBtn.onclick = (e) => {
-    e.stopPropagation(); // IMPEDE o clique de "vazar" para a div pai
-    
-    warning.innerHTML = "🚫"; // Minimiza
+    e.stopPropagation();
+    warning.innerHTML = "🚫";
     warning.style.padding = "10px";
     warning.style.cursor = "pointer";
     warning.title = "Bloqueador ativo (Clique para expandir)";
     
-    // Agora, quando a div estiver minimizada, clicar nela expande novamente
     warning.onclick = () => {
       warning.remove();
       createWarning();
     };
   };
 }
+
 function removeWarning() {
   const warning = document.getElementById("shorts-block-warning");
   if (warning) warning.remove();
