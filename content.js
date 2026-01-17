@@ -83,18 +83,46 @@ observer.observe(document.documentElement, { childList: true, subtree: true });
 
 // 5. AVISO VISUAL
 function createWarning() {
-  if (!extensionEnabled || !document.body || document.getElementById("shorts-block-warning")) return;
+  if (!extensionEnabled || document.getElementById("shorts-block-warning")) return;
+
   const warning = document.createElement("div");
   warning.id = "shorts-block-warning";
-  warning.innerText = "🚫 Bloqueador de Shorts ativo";
-  Object.assign(warning.style, {
-    position: "fixed", top: "20px", right: "20px", padding: "12px 16px",
-    background: "white", border: "2px solid red", color: "red",
-    fontWeight: "bold", zIndex: "9999", borderRadius: "8px"
-  });
-  document.body.appendChild(warning);
-}
+  
+  warning.innerHTML = `
+    <span id="warning-text">🚫 Shorts bloqueados</span>
+    <button id="close-warning" style="margin-left: 10px; cursor: pointer; background: none; border: none; color: #cc0000; font-weight: bold; padding: 2px 5px;">✕</button>
+  `;
 
+  Object.assign(warning.style, {
+    position: "fixed", top: "20px", right: "20px", 
+    padding: "10px 15px", background: "rgba(255, 255, 255, 0.9)",
+    backdropFilter: "blur(5px)", border: "1px solid rgba(204, 0, 0, 0.3)",
+    color: "#cc0000", fontWeight: "600", zIndex: "9999", 
+    borderRadius: "12px", boxShadow: "0 4px 15px rgba(0,0,0,0.1)",
+    display: "flex", alignItems: "center", transition: "all 0.2s ease",
+    fontSize: "13px", fontFamily: "sans-serif"
+  });
+
+  document.body.appendChild(warning);
+
+  // Selecionamos o botão após ele ser adicionado ao corpo da página
+  const closeBtn = document.getElementById("close-warning");
+
+  closeBtn.onclick = (e) => {
+    e.stopPropagation(); // IMPEDE o clique de "vazar" para a div pai
+    
+    warning.innerHTML = "🚫"; // Minimiza
+    warning.style.padding = "10px";
+    warning.style.cursor = "pointer";
+    warning.title = "Bloqueador ativo (Clique para expandir)";
+    
+    // Agora, quando a div estiver minimizada, clicar nela expande novamente
+    warning.onclick = () => {
+      warning.remove();
+      createWarning();
+    };
+  };
+}
 function removeWarning() {
   const warning = document.getElementById("shorts-block-warning");
   if (warning) warning.remove();

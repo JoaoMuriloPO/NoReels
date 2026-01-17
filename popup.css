@@ -57,3 +57,30 @@ input:checked + .slider {
 input:checked + .slider::before {
   transform: translateX(24px);
 }
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.social-btn {
+  text-decoration: none;
+  font-size: 11px;
+  color: #555;
+  background: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 6px;
+  transition: background 0.2s;
+  font-family: sans-serif;
+}
+
+.social-btn:hover {
+  background: #e0e0e0;
+  color: #000;
+}
+
+/* Garanta que o container tenha uma largura mínima boa */
+body {
+  min-width: 180px;
+  padding: 10px;
+}
