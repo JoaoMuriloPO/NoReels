@@ -1,134 +1,129 @@
 console.log("[YT Shorts Blocker] content.js ativo");
+
 let extensionEnabled = true;
 
+// ==========================
+// 1. SINCRONIA COM O BOTÃO (STORAGE)
+// ==========================
+// Carrega o estado inicial
 chrome.storage.local.get(["enabled"], result => {
   extensionEnabled = result.enabled ?? true;
+  executarLimpezaGeral(); // Tenta limpar assim que carrega
 });
+
+// Escuta a mudança do botão em tempo real
 chrome.storage.onChanged.addListener(changes => {
   if (changes.enabled) {
     extensionEnabled = changes.enabled.newValue;
-
-    console.log(
-      "[YT Shorts Blocker] Estado alterado:",
-      extensionEnabled ? "ATIVO" : "DESATIVADO"
-    );
-
-    if (!extensionEnabled) {
+    console.log("[YT Shorts Blocker] Estado alterado para:", extensionEnabled);
+    
+    if (extensionEnabled) {
+      executarLimpezaGeral();
+    } else {
+      reexibirTudo(); // Se desligar, precisamos mostrar os vídeos de volta
       removeWarning();
     }
   }
 });
 
-let warningShown = false;
+// ==========================
+// 2. FUNÇÕES DE BLOQUEIO (SUA LÓGICA ORIGINAL)
+// ==========================
 
+function blockElement(element) {
+  if (!element) return;
+  
+  // Apenas bloqueia se a extensão estiver ligada
+  if (extensionEnabled) {
+    element.style.display = "none";
+    createWarning();
+  }
+}
+
+// Para o botão funcionar, precisamos de uma forma de "desbloquear"
+function reexibirTudo() {
+  const items = document.querySelectorAll(
+    "grid-shelf-view-model, ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer"
+  );
+  items.forEach(el => {
+    el.style.display = ""; // Remove o "none" e volta ao padrão do YouTube
+  });
+}
+
+// 1️⃣ Shelf inteira
+function blockShortsShelf() {
+  document.querySelectorAll("grid-shelf-view-model").forEach(el => blockElement(el));
+}
+
+// 2️⃣ Shorts inline (badge)
+function blockInlineShorts() {
+  const items = document.querySelectorAll(
+    "ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer"
+  );
+
+  items.forEach(item => {
+    // Verificamos o badge SHORTS
+    const badge = item.querySelector(".yt-badge-shape__text");
+    if (badge && badge.textContent.trim().toUpperCase() === "SHORTS") {
+      blockElement(item);
+    }
+  });
+}
+
+// 3️⃣ Shorts via overlay (mais confiável)
+function blockOverlayShorts() {
+  document.querySelectorAll('ytd-thumbnail-overlay-time-status-renderer[overlay-style="SHORTS"]')
+    .forEach(overlay => {
+      const card = overlay.closest("ytd-rich-item-renderer") ||
+                   overlay.closest("ytd-video-renderer") ||
+                   overlay.closest("ytd-grid-video-renderer") ||
+                   overlay.closest("ytd-compact-video-renderer");
+      blockElement(card);
+    });
+}
+
+// Função para rodar todas as suas detecções de uma vez
+function executarLimpezaGeral() {
+  if (!extensionEnabled) return;
+  blockShortsShelf();
+  blockInlineShorts();
+  blockOverlayShorts();
+}
+
+// ==========================
+// 3. OBSERVER (VIGIA O SCROLL)
+// ==========================
+const observer = new MutationObserver(() => {
+  if (extensionEnabled) {
+    executarLimpezaGeral();
+  }
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
+
+// Execução inicial manual
+executarLimpezaGeral();
+
+// ==========================
+// 4. AVISO VISUAL (SUA LÓGICA)
+// ==========================
 function createWarning() {
-  if (warningShown) return;
-  warningShown = true;
-
-  console.log("[YT Shorts Blocker] EXTENSAO RODANDO");
+  if (!extensionEnabled || document.getElementById("shorts-block-warning")) return;
 
   const warning = document.createElement("div");
   warning.id = "shorts-block-warning";
   warning.innerText = "🚫 Bloqueador de Shorts ativo";
 
-  warning.style.position = "fixed";
-  warning.style.top = "20px";
-  warning.style.right = "20px";
-  warning.style.padding = "12px 16px";
-  warning.style.background = "white";
-  warning.style.border = "2px solid red";
-  warning.style.color = "red";
-  warning.style.fontWeight = "bold";
-  warning.style.zIndex = "9999";
-  warning.style.borderRadius = "8px";
+  Object.assign(warning.style, {
+    position: "fixed", top: "20px", right: "20px", padding: "12px 16px",
+    background: "white", border: "2px solid red", color: "red",
+    fontWeight: "bold", zIndex: "9999", borderRadius: "8px"
+  });
 
   document.body.appendChild(warning);
 }
+
 function removeWarning() {
   const warning = document.getElementById("shorts-block-warning");
-  if (warning) {
-    warning.remove();
-    warningShown = false;
-  }
+  if (warning) warning.remove();
 }
-
-
-/**
- * MÉTODO 1 — Remove a seção inteira de Shorts
- */
-function removeShortsShelf() {
-  const shelves = document.querySelectorAll("grid-shelf-view-model");
-
-  if (shelves.length > 0) {
-    shelves.forEach(el => el.remove());
-    createWarning();
-  }
-}
-
-/**
- * MÉTODO 2 — Remove Shorts misturados no feed (badge visível)
- */
-function removeInlineShorts() {
-  const videoItems = document.querySelectorAll(
-    "ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer"
-  );
-
-  videoItems.forEach(item => {
-    if (item.dataset.checked) return;
-    item.dataset.checked = "true";
-
-    const badgeText = item.querySelector(".yt-badge-shape__text");
-
-    if (
-      badgeText &&
-      badgeText.textContent.trim().toUpperCase() === "SHORTS"
-    ) {
-      console.log("[YT Shorts Blocker] Short inline removido (badge)", item);
-      item.remove();
-      createWarning();
-    }
-  });
-}
-
-/**
- * MÉTODO 3 — Remove Shorts via overlay-style="SHORTS" (OURO 🔥)
- */
-function removeOverlayShorts() {
-  const overlays = document.querySelectorAll(
-    'ytd-thumbnail-overlay-time-status-renderer[overlay-style="SHORTS"]'
-  );
-
-  overlays.forEach(overlay => {
-    const videoCard =
-      overlay.closest("ytd-rich-item-renderer") ||
-      overlay.closest("ytd-video-renderer") ||
-      overlay.closest("ytd-grid-video-renderer") ||
-      overlay.closest("ytd-compact-video-renderer");
-
-    if (videoCard) {
-      console.log("[YT Shorts Blocker] Short removido (overlay)", videoCard);
-      videoCard.remove();
-      createWarning();
-    }
-  });
-}
-
-/**
- * Observer principal
- */
-const observer = new MutationObserver(() => {
-if (!extensionEnabled) return;
-  removeShortsShelf();
-  removeInlineShorts();
-  removeOverlayShorts();
-});
-
-observer.observe(document.body, {
-  childList: true,
-  subtree: true
-});
-
-// Primeira execução
-removeShortsShelf();
-removeInlineShorts();
-removeOverlayShorts();
