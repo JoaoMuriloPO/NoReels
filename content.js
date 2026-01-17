@@ -2,67 +2,49 @@ console.log("[YT Shorts Blocker] content.js ativo");
 
 let extensionEnabled = true;
 
-// ==========================
-// 1. SINCRONIA COM O BOTÃO (STORAGE)
-// ==========================
-// Carrega o estado inicial
+// 1. CARREGAMENTO DO ESTADO (Otimizado para iniciar ligado)
 chrome.storage.local.get(["enabled"], result => {
   extensionEnabled = result.enabled ?? true;
-  executarLimpezaGeral(); // Tenta limpar assim que carrega
+  // Se já houver body, limpa na hora. Se não, o observer pegará depois.
+  if (extensionEnabled && document.body) {
+    executarLimpezaGeral();
+  }
 });
 
-// Escuta a mudança do botão em tempo real
+// 2. ESCUTA MUDANÇAS NO BOTÃO
 chrome.storage.onChanged.addListener(changes => {
   if (changes.enabled) {
     extensionEnabled = changes.enabled.newValue;
-    console.log("[YT Shorts Blocker] Estado alterado para:", extensionEnabled);
-    
     if (extensionEnabled) {
       executarLimpezaGeral();
     } else {
-      reexibirTudo(); // Se desligar, precisamos mostrar os vídeos de volta
+      reexibirTudo();
       removeWarning();
     }
   }
 });
 
-// ==========================
-// 2. FUNÇÕES DE BLOQUEIO (SUA LÓGICA ORIGINAL)
-// ==========================
-
+// 3. FUNÇÕES DE BLOQUEIO (ORIGINAIS)
 function blockElement(element) {
-  if (!element) return;
-  
-  // Apenas bloqueia se a extensão estiver ligada
-  if (extensionEnabled) {
-    element.style.display = "none";
-    createWarning();
-  }
+  if (!element || !extensionEnabled) return;
+  element.style.display = "none";
+  createWarning();
 }
 
-// Para o botão funcionar, precisamos de uma forma de "desbloquear"
 function reexibirTudo() {
   const items = document.querySelectorAll(
     "grid-shelf-view-model, ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer"
   );
-  items.forEach(el => {
-    el.style.display = ""; // Remove o "none" e volta ao padrão do YouTube
-  });
+  items.forEach(el => { el.style.display = ""; });
 }
 
-// 1️⃣ Shelf inteira
 function blockShortsShelf() {
   document.querySelectorAll("grid-shelf-view-model").forEach(el => blockElement(el));
 }
 
-// 2️⃣ Shorts inline (badge)
 function blockInlineShorts() {
-  const items = document.querySelectorAll(
-    "ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer"
-  );
-
+  const items = document.querySelectorAll("ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer");
   items.forEach(item => {
-    // Verificamos o badge SHORTS
     const badge = item.querySelector(".yt-badge-shape__text");
     if (badge && badge.textContent.trim().toUpperCase() === "SHORTS") {
       blockElement(item);
@@ -70,7 +52,6 @@ function blockInlineShorts() {
   });
 }
 
-// 3️⃣ Shorts via overlay (mais confiável)
 function blockOverlayShorts() {
   document.querySelectorAll('ytd-thumbnail-overlay-time-status-renderer[overlay-style="SHORTS"]')
     .forEach(overlay => {
@@ -82,44 +63,35 @@ function blockOverlayShorts() {
     });
 }
 
-// Função para rodar todas as suas detecções de uma vez
 function executarLimpezaGeral() {
-  if (!extensionEnabled) return;
+  if (!extensionEnabled || !document.body) return;
   blockShortsShelf();
   blockInlineShorts();
   blockOverlayShorts();
 }
 
-// ==========================
-// 3. OBSERVER (VIGIA O SCROLL)
-// ==========================
+// 4. OBSERVER (FLUIDEZ TOTAL)
+// Em vez de observar o 'body' direto, observamos o 'document' que sempre existe
 const observer = new MutationObserver(() => {
   if (extensionEnabled) {
     executarLimpezaGeral();
   }
 });
 
-observer.observe(document.body, { childList: true, subtree: true });
+// Observar o documentElement (HTML) é mais seguro e fluido que o body no início
+observer.observe(document.documentElement, { childList: true, subtree: true });
 
-// Execução inicial manual
-executarLimpezaGeral();
-
-// ==========================
-// 4. AVISO VISUAL (SUA LÓGICA)
-// ==========================
+// 5. AVISO VISUAL
 function createWarning() {
-  if (!extensionEnabled || document.getElementById("shorts-block-warning")) return;
-
+  if (!extensionEnabled || !document.body || document.getElementById("shorts-block-warning")) return;
   const warning = document.createElement("div");
   warning.id = "shorts-block-warning";
   warning.innerText = "🚫 Bloqueador de Shorts ativo";
-
   Object.assign(warning.style, {
     position: "fixed", top: "20px", right: "20px", padding: "12px 16px",
     background: "white", border: "2px solid red", color: "red",
     fontWeight: "bold", zIndex: "9999", borderRadius: "8px"
   });
-
   document.body.appendChild(warning);
 }
 
