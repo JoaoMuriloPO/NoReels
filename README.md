@@ -5,7 +5,7 @@
 # NoReels - YouTube Shorts Blocker
 
 # 🌐 Landing Page & Demo
-Você pode visualizar a página oficial do projeto e baixar a versão pronta para uso aqui: 👉 
+Você pode visualizar a página oficial do projeto e baixar a versão pronta para uso aqui: 👉 https://no-reels.vercel.app/
 
 # [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow)](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript) [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue)](https://developer.chrome.com/docs/extensions/) [![HTML5](https://img.shields.io/badge/HTML5-orange)](https://developer.mozilla.org/pt-BR/docs/Web/HTML) [![CSS3](https://img.shields.io/badge/CSS3-blue)](https://developer.mozilla.org/pt-BR/docs/Web/CSS)
 
@@ -42,8 +42,8 @@ Ative o Modo do desenvolvedor no canto superior direito
 Clique em Carregar sem compactação
 
 Selecione a pasta raiz deste projeto
-
-🎯 Como Utilizar
+```
+2. Como Utilizar
 Ativando o Bloqueio
 Ao instalar, a extensão já vem ativada por padrão. Ela monitora o carregamento da página do YouTube e oculta as prateleiras de Shorts e vídeos individuais marcados com a badge "SHORTS".
 
