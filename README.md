@@ -1,4 +1,6 @@
 
+<img width="1919" height="863" alt="image" src="https://github.com/user-attachments/assets/1f8ecca6-2136-4bdf-b997-51202f80f66f" />
+
 
 # NoReels - YouTube Shorts Blocker
 
