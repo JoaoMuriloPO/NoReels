@@ -176,6 +176,47 @@ footer a {
     font-weight: 600;
 }
 
+/* --- SCROLLBAR FUTURISTA --- */
+
+/* 1. Escondemos a largura total para um visual mais "slim" */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* 2. O trilho (fundo) agora é totalmente invisível para dar efeito de flutuação */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* 3. O "Thumb" (a parte que desce) */
+::-webkit-scrollbar-thumb {
+    /* Gradiente que dá profundidade */
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--primary),
+        var(--primary),
+        transparent
+    );
+    border-radius: 100px;
+    /* Um brilho externo (glow) que faz a barra parecer neon */
+    box-shadow: 0 0 12px var(--primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 4. Efeito de interação: a barra "acende" no hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+    box-shadow: 0 0 20px var(--primary), 0 0 40px var(--primary);
+    width: 10px; /* Ela levemente engrossa (em navegadores que suportam) */
+}
+
+/* 5. Estilização para Firefox (mais limitada, mas mantendo a cor) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
     nav { padding: 20px 5%; }
