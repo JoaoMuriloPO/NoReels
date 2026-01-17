@@ -1,0 +1,184 @@
+:root {
+    --primary: #ff4d4d;
+    --primary-dark: #cc0000;
+    --bg: #0f172a;
+    --text: #f8fafc;
+    --card-bg: rgba(30, 41, 59, 0.7);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(255, 77, 77, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(51, 65, 85, 0.2) 0px, transparent 50%);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Animação de Entrada */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Navegação */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 10%;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.links a {
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 20px;
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+.links a:hover { opacity: 1; color: var(--primary); }
+
+/* Header */
+header {
+    text-align: center;
+    padding: 120px 10%;
+    animation: fadeInUp 1s ease-out;
+}
+
+header h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.2;
+    font-weight: 800;
+    background: linear-gradient(to right, #fff, var(--primary));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 25px;
+}
+
+header p {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto 40px;
+}
+
+.btn-download {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    padding: 18px 40px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 10px 25px rgba(255, 77, 77, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-download:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(255, 77, 77, 0.5);
+    background: #ff6666;
+}
+
+/* Seção de Tutorial */
+#tutorial {
+    padding: 100px 10%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+#tutorial h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 60px;
+}
+
+.step {
+    margin-bottom: 50px;
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s ease;
+}
+
+.step:hover {
+    transform: scale(1.01);
+    border-color: rgba(255, 77, 77, 0.4);
+}
+
+.step h3 {
+    color: var(--primary);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.step p { color: #cbd5e1; }
+
+.placeholder-img {
+    margin-top: 25px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: #000;
+}
+
+.placeholder-img img {
+    width: 100%;
+    display: block;
+    opacity: 0.9;
+    transition: 0.5s;
+}
+
+.placeholder-img:hover img {
+    opacity: 1;
+    transform: scale(1.02);
+}
+
+/* Rodapé */
+footer {
+    text-align: center;
+    padding: 60px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #64748b;
+}
+
+footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    nav { padding: 20px 5%; }
+    header { padding: 80px 5%; }
+    .step { padding: 25px; }
+}
