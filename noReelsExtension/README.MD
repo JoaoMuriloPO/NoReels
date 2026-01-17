@@ -1,4 +1,4 @@
-<img src="LINK_DA_SUA_IMAGEM_AQUI" alt="NoReels Preview" width="100%" />
+
 
 # NoReels - YouTube Shorts Blocker
 
