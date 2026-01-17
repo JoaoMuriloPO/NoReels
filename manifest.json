@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "YT Shorts Blocker",
+  "version": "1.0",
+  "description": "Bloqueia Shorts do YouTube",
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}

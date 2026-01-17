@@ -1,0 +1,56 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 12px;
+  min-width: 180px;
+}
+
+h3 {
+  margin-top: 0;
+  text-align: center;
+}
+
+#status {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Toggle bonitinho */
+.switch {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  width: 50px;
+  height: 26px;
+  background-color: #ccc;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background-color: red;
+}
+
+input:checked + .slider::before {
+  transform: translateX(24px);
+}
