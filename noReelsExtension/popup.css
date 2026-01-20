@@ -17,7 +17,6 @@ h3 {
   font-weight: bold;
 }
 
-/* Toggle */
 .switch {
   display: flex;
   justify-content: center;
@@ -51,7 +50,7 @@ h3 {
 }
 
 input:checked + .slider {
-  background-color: #ff0000; /* Vermelho YouTube */
+  background-color: #ff0000;
 }
 
 input:checked + .slider::before {
@@ -79,7 +78,6 @@ input:checked + .slider::before {
   color: #000;
 }
 
-/* Garanta que o container tenha uma largura mínima boa */
 body {
   min-width: 180px;
   padding: 10px;
