@@ -2,7 +2,6 @@ console.log("[YT Shorts Blocker] content.js ativo");
 
 let extensionEnabled = true;
 
-// 1. CARREGAMENTO DO ESTADO E INICIALIZAÇÃO SEGURA
 function iniciar() {
   chrome.storage.local.get(["enabled"], result => {
     extensionEnabled = result.enabled ?? true;
@@ -19,7 +18,6 @@ if (document.body) {
   document.addEventListener("DOMContentLoaded", iniciar);
 }
 
-// 2. ESCUTA MUDANÇAS NO BOTÃO (POPUP)
 chrome.storage.onChanged.addListener(changes => {
   if (changes.enabled) {
     extensionEnabled = changes.enabled.newValue;
@@ -32,7 +30,10 @@ chrome.storage.onChanged.addListener(changes => {
   }
 });
 
+<<<<<<< HEAD
 // 3. FUNÇÕES DE BLOQUEIO
+=======
+>>>>>>> 655f7442e4d816b19df7466ec85ddf9962a179ca
 function blockElement(element) {
   if (!element || !extensionEnabled || element.style.display === "none") return;
   element.style.display = "none";
@@ -102,14 +103,20 @@ function executarLimpezaGeral() {
   blockOverlayShorts();
 }
 
+<<<<<<< HEAD
 // 4. OBSERVER
+=======
+>>>>>>> 655f7442e4d816b19df7466ec85ddf9962a179ca
 const observer = new MutationObserver(() => {
   if (extensionEnabled) {
     executarLimpezaGeral();
   }
 });
 
+<<<<<<< HEAD
 // 5. AVISO VISUAL
+=======
+>>>>>>> 655f7442e4d816b19df7466ec85ddf9962a179ca
 function createWarning() {
   if (!extensionEnabled || document.getElementById("shorts-block-warning")) return;
 
