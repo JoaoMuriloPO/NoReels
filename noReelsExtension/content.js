@@ -8,7 +8,6 @@ function iniciar() {
     extensionEnabled = result.enabled ?? true;
     if (extensionEnabled && document.body) {
       executarLimpezaGeral();
-      // O segredo para a Home: observar o body após ele existir
       observer.observe(document.body, { childList: true, subtree: true });
     }
   });
@@ -33,7 +32,7 @@ chrome.storage.onChanged.addListener(changes => {
   }
 });
 
-// 3. FUNÇÕES DE BLOQUEIO (ATUALIZADAS PARA PESQUISA + HOME)
+// 3. FUNÇÕES DE BLOQUEIO
 function blockElement(element) {
   if (!element || !extensionEnabled || element.style.display === "none") return;
   element.style.display = "none";
@@ -41,18 +40,30 @@ function blockElement(element) {
 }
 
 function reexibirTudo() {
-  // Seletores expandidos para garantir que tudo volte ao normal ao desligar
   const items = document.querySelectorAll(
-    "grid-shelf-view-model, ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer, ytd-rich-section-renderer, ytd-reel-shelf-renderer, ytd-grid-video-renderer"
+    "grid-shelf-view-model, ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer, ytd-rich-section-renderer, ytd-reel-shelf-renderer, ytd-grid-video-renderer, ytd-guide-entry-renderer, ytd-mini-guide-entry-renderer"
   );
   items.forEach(el => { el.style.display = ""; });
 }
 
+// Remove o botão "Shorts" de ambos os menus laterais (Grande e Mini)
+function blockSidebarShorts() {
+  // Menu Lateral Expandido
+  const sidebarLink = document.querySelector('ytd-guide-entry-renderer a[title="Shorts"]');
+  if (sidebarLink) {
+    blockElement(sidebarLink.closest("ytd-guide-entry-renderer"));
+  }
+
+  // Mini Menu Lateral (Compacto)
+  const miniSidebarLink = document.querySelector('ytd-mini-guide-entry-renderer a[title="Shorts"]');
+  if (miniSidebarLink) {
+    blockElement(miniSidebarLink.closest("ytd-mini-guide-entry-renderer"));
+  }
+}
+
 function blockShortsShelf() {
-  // Pega as prateleiras de Shorts (Shelfs) na pesquisa e na Home
   const shelves = document.querySelectorAll("ytd-rich-section-renderer, ytd-reel-shelf-renderer, grid-shelf-view-model");
   shelves.forEach(el => {
-    // Se o texto interno contém "Shorts", bloqueamos a seção inteira
     if (el.textContent.includes("Shorts")) {
       blockElement(el);
     }
@@ -60,13 +71,11 @@ function blockShortsShelf() {
 }
 
 function blockInlineShorts() {
-  // Itens individuais na grade (Home e Pesquisa)
   const items = document.querySelectorAll("ytd-video-renderer, ytd-rich-item-renderer, ytd-compact-video-renderer, ytd-grid-video-renderer");
   items.forEach(item => {
     const badge = item.querySelector(".yt-badge-shape__text");
     const thumbnail = item.querySelector("a#thumbnail");
     
-    // Bloqueia se tiver a etiqueta "SHORTS" ou se o link levar para /shorts/
     if ((badge && badge.textContent.trim().toUpperCase() === "SHORTS") || 
         (thumbnail && thumbnail.href.includes("/shorts/"))) {
       blockElement(item);
@@ -75,7 +84,6 @@ function blockInlineShorts() {
 }
 
 function blockOverlayShorts() {
-  // Bloqueio rápido pelo ícone de overlay do YouTube
   document.querySelectorAll('ytd-thumbnail-overlay-time-status-renderer[overlay-style="SHORTS"]')
     .forEach(overlay => {
       const card = overlay.closest("ytd-rich-item-renderer") ||
@@ -88,19 +96,20 @@ function blockOverlayShorts() {
 
 function executarLimpezaGeral() {
   if (!extensionEnabled || !document.body) return;
+  blockSidebarShorts();
   blockShortsShelf();
   blockInlineShorts();
   blockOverlayShorts();
 }
 
-// 4. OBSERVER (Monitora o carregamento infinito do YouTube)
+// 4. OBSERVER
 const observer = new MutationObserver(() => {
   if (extensionEnabled) {
     executarLimpezaGeral();
   }
 });
 
-// 5. AVISO VISUAL (O seu código original com o X de fechar)
+// 5. AVISO VISUAL
 function createWarning() {
   if (!extensionEnabled || document.getElementById("shorts-block-warning")) return;
 

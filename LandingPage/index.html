@@ -1,61 +1,185 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoReels | Recupere seu tempo</title>
+    <title>NoReels | Foco Radical no YouTube</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <nav>
-        <div class="logo">🚫 NoReels</div>
-        <div class="links">
-            <a href="#tutorial">Como Instalar</a>
-            <a style="text-decoration: none;" href=""> • </a>
-            <a href="https://github.com/JoaoMuriloPO" target="_blank">GitHub</a>
+        <div class="nav-container">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"
+                        fill="url(#logo-grad)" />
+                    <path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="white" />
+                    <path d="M4 4l16 16" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+                </svg>
+                <span>NoReels</span>
+
+                <svg width="0" height="0" style="position:absolute">
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#ff4d4d" />
+                            <stop offset="100%" style="stop-color:#f97316" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Recursos</a>
+                <a href="#tutorial">Instalação</a>
+                <a href="https://github.com/JoaoMuriloPO" class="nav-btn" target="_blank">GitHub</a>
+            </div>
         </div>
     </nav>
 
-    <header>
-        <h1>Diga adeus à distração dos Shorts.</h1>
-        <p>Uma extensão leve e eficiente para bloquear conteúdos irrelevantes e focar no que importa.</p>
-        <a href="download/noReelsExtension.7z" class="btn-download">Baixar Extensão (.zip)</a>
-    </header>
+    <main>
+        <section id="baixar" class="hero">
+            <div class="hero-content">
+                <span class="badge">Versão 1.0 Disponível</span>
+                <h1>Recupere sua atenção. <br><span class="gradient-text">Sem distrações.</span></h1>
+                <p>O NoReels é uma extensão open-source que limpa sua interface do YouTube, removendo Shorts e
+                    algoritmos de retenção para que você foque no aprendizado.</p>
+                <div class="hero-btns">
+                    <a href="download/noReelsExtension.7z" class="btn-primary" download >Baixar Extensão</a>
+                    <a href="#tutorial" class="btn-secondary">Ver Tutorial</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="img/tablet.png" alt="Preview NoReels" class="floating-tablet">
+            </div>
+        </section>
 
-    <section id="tutorial">
-        <h2>Como instalar manualmente</h2>
-        
-        <div class="step">
-            <h3>1. Extraia o arquivo</h3>
-            <p>Após baixar o .zip, extraia o conteúdo para uma pasta permanente no seu computador.</p>
-        </div>
+        <section id="features" class="features">
+            <div class="section-header">
+                <h2>Simples. Leve. Poderoso.</h2>
+                <p>Desenvolvido para ser invisível e eficiente.</p>
+            </div>
+            <div class="features-grid">
+                <div class="f-card">
+                    <div class="icon">🎯</div>
+                    <h3>Bloqueio Total</h3>
+                    <p>Remove Shorts da Home, Pesquisa e barra lateral instantaneamente.</p>
+                </div>
+                <div class="f-card">
+                    <div class="icon">⚡</div>
+                    <h3>Performance</h3>
+                    <p>Código nativo sem dependências, rodando a 60fps sem travar o browser.</p>
+                </div>
+                <div class="f-card">
+                    <div class="icon">🔐</div>
+                    <h3>Privacidade</h3>
+                    <p>Não coletamos dados. Todo o processamento acontece no seu computador.</p>
+                </div>
+            </div>
+        </section>
 
-        <div class="step">
-            <h3>2. Abra as extensões do Chrome</h3>
-            <p>No seu navegador, digite <code>chrome://extensions/</code> na barra de endereços ou acesse pelo menu.</p>
-            <div class="placeholder-img">
-                <img src="img/image.png" alt="">
-               
+        <section id="tutorial" class="tutorial">
+    <div class="section-header">
+        <h2>Instalação em 60 segundos</h2>
+    </div>
+    <div class="steps-container">
+        <div class="step-item">
+            <div class="step-num">01</div>
+            <div class="step-text">
+                <h3>Extraia o arquivo</h3>
+                <p>Descompacte o .zip em uma pasta segura (ex: Documentos).</p>
+            </div>
+            <div class="step-visual">
+                <a href="#baixar">
+                    <img src="img/Extrair.png" alt="Extrair" class="step-img">
+                </a>
+                
             </div>
         </div>
 
-        <div class="step">
-            <h3>3. Ative o Modo do Desenvolvedor</h3>
-            <p>No canto superior direito, ative a chave "Modo do desenvolvedor".</p>
-            <div class="placeholder-img"><img class="imgPlace" src="img/DevMode.png" alt=""></div>
-        </div>
-
-        <div class="step">
-            <h3>4. Carregue a pasta</h3>
-            <p>Clique em <b>"Carregar sem compactação"</b> e selecione a pasta onde você extraiu os arquivos.</p>
-            <div class="placeholder-img">
-                <img class="imgPlace" src="img/Load.png" alt="">
+        <div class="step-item">
+            <div class="step-num">02</div>
+            <div class="step-text">
+                <h3>Modo Developer</h3>
+                <p>Acesse <span class="copy-link" id="copy-link">chrome://extensions/</span> e ative a chave.</p>
+            </div>
+            <div class="step-visual">
+                <img src="img/DevMode.png" alt="Modo Dev" class="step-img">
             </div>
         </div>
-    </section>
+
+        <div class="step-item">
+            <div class="step-num">03</div>
+            <div class="step-text">
+                <h3>Carregar Pasta</h3>
+                <p>Clique em "Carregar sem compactação" e selecione a pasta.</p>
+            </div>
+            <div class="step-visual">
+                <img src="img/Load.png" alt="Load" class="step-img">
+            </div>
+        </div>
+    </div>
+</section>
+    </main>
 
     <footer>
-        <p>Desenvolvido por Joao Murilo • <a href="https://www.linkedin.com/in/joaomurilopoo/">LinkedIn</a> • <a href="https://github.com/JoaoMuriloPO">GitHub</a></p>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"
+                            fill="url(#logo-grad)" />
+                        <path d="M9.75 15.02l5.75-3.27-5.75-3.27v6.54z" fill="white" />
+                        <path d="M4 4l16 16" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+                    </svg>
+                    <span>NoReels</span>
+
+                    <svg width="0" height="0" style="position:absolute">
+                        <defs>
+                            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#ff4d4d" />
+                                <stop offset="100%" style="stop-color:#f97316" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <p>Limpando a web, um elemento por vez.</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Social</h4>
+                    <a href="https://www.linkedin.com/in/joaomurilopoo/" target="_blank">LinkedIn</a>
+                    <a href="https://github.com/JoaoMuriloPO" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Joao Murilo. Feito para desenvolvedores focados.</p>
+        </div>
     </footer>
+
+    <script>
+        document.getElementById('copy-link').addEventListener('click', function () {
+            const textToCopy = "chrome://extensions/";
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                let toast = document.getElementById('copy-toast');
+                if (!toast) {
+                    toast = document.createElement('div');
+                    toast.id = 'copy-toast';
+                    toast.innerHTML = '<span>✅</span> Link copiado para colar!';
+                    document.body.appendChild(toast);
+                }
+                toast.classList.add('show');
+                setTimeout(() => { toast.classList.remove('show'); }, 3000);
+            });
+        });
+    </script>
 </body>
+
 </html>
