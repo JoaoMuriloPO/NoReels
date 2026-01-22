@@ -30,10 +30,7 @@ chrome.storage.onChanged.addListener(changes => {
   }
 });
 
-<<<<<<< HEAD
 // 3. FUNÇÕES DE BLOQUEIO
-=======
->>>>>>> 655f7442e4d816b19df7466ec85ddf9962a179ca
 function blockElement(element) {
   if (!element || !extensionEnabled || element.style.display === "none") return;
   element.style.display = "none";
@@ -103,20 +100,14 @@ function executarLimpezaGeral() {
   blockOverlayShorts();
 }
 
-<<<<<<< HEAD
 // 4. OBSERVER
-=======
->>>>>>> 655f7442e4d816b19df7466ec85ddf9962a179ca
 const observer = new MutationObserver(() => {
   if (extensionEnabled) {
     executarLimpezaGeral();
   }
 });
 
-<<<<<<< HEAD
 // 5. AVISO VISUAL
-=======
->>>>>>> 655f7442e4d816b19df7466ec85ddf9962a179ca
 function createWarning() {
   if (!extensionEnabled || document.getElementById("shorts-block-warning")) return;
 
